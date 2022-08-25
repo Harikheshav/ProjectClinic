@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="SQL_Con">
+      <HintPath>..\..\SQL_Con\SQL_Con\bin\Debug\net6.0\SQL_Con.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
