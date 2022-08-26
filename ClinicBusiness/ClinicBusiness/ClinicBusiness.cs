@@ -39,6 +39,10 @@ namespace ClinicBusiness
             this.lname = lname;
             this.password = password;
         }
+        public FrontOffice()
+        {
+
+        }
         public string Uname
         {
             get
@@ -48,11 +52,11 @@ namespace ClinicBusiness
             }
             set
             {
-                if (uname.Length <= 10)
+                if (value.Length >= 10)
                 {
-                    throw new ValidationException("Requires atleast 10 characters");
+                    throw new ValidationException("Requires maximum 10 characters");
                 }
-                else if (hasSpecChar(uname))
+                else if (hasSpecChar(value))
                 {
                     throw new ValidationException("Cannot contain special characters");
                 }
@@ -89,19 +93,18 @@ namespace ClinicBusiness
         {
             get
             {
-                if (!password.Contains('@'))
+               return password;
+            }
+            set
+            {
+                if (!value.Contains('@'))
                 {
                     throw new ValidationException("Should contain @ in password");
                 }
                 else
-                {
-                    return password;
+                { 
+                    password = value;
                 }
-            }
-            set
-            {
-                password = value;
-
             }
         }
     }
@@ -176,6 +179,10 @@ namespace ClinicBusiness
         char sex;
         int age;
         DateOnly dob;
+        public Patient()
+        {
+
+        }
         public Patient(string fname, string lname, char sex, int age, DateOnly dob)
         {
             this.fname = fname;
