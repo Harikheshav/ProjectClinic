@@ -147,7 +147,18 @@ namespace ClinicClient
                             if (choice.ToLower() == "cancel appointment" || choice == "4" || choice.ToLower() == "ca")
                             {
                                 string appid;
-                                cd.selectdata(tablename: "appointment");
+                                List<List<string>> dtls = cd.SQL_Lst(cd.selectdata(tablename: "appointment"));
+                                List <string> cols = cd.getcolname(tablename: "appointment").Keys.ToList();
+                                foreach (List<string> dtl in dtls)
+                                {
+                                    for (int i = 0; i < cols.Count; i++)
+                                    {
+                                        Console.WriteLine(cols[i].ToUpper() + ":" + dtl[i]);
+
+                                    }
+
+                                }
+
                                 Console.WriteLine("Appoinment Id");
                                 appid = Console.ReadLine();
                                 cd.deletedata(tablename: "appointment", wherecolname: "appid", what: appid.ToString());
