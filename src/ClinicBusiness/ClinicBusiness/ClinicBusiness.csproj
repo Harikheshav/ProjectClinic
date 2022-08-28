@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <Reference Include="SQL_Con">
-      <HintPath>..\..\..\SQL_Con\SQL_Con\obj\Debug\net6.0\ref\SQL_Con.dll</HintPath>
+      <HintPath>..\..\..\..\SQL_Con\SQL_Con\bin\Debug\net6.0\SQL_Con.dll</HintPath>
     </Reference>
   </ItemGroup>
 

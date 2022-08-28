@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ClinicBusiness">
+      <HintPath>..\..\ClinicBusiness\ClinicBusiness\bin\Debug\net6.0\ClinicBusiness.dll</HintPath>
+    </Reference>
+    <Reference Include="ClinicDataAccess">
+      <HintPath>..\..\ClinicDataAccess\ClinicDataAccess\bin\Debug\net6.0\ClinicDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="SQL_Con">
+      <HintPath>..\..\..\..\SQL_Con\SQL_Con\bin\Debug\net6.0\SQL_Con.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

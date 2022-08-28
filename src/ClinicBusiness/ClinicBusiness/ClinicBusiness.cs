@@ -299,8 +299,8 @@ namespace ClinicBusiness
             }
             public DateTime Visitdate
             {
-                get { return Visitdate; }
-                set { Visitdate = value; }
+                get { return visitdate; }
+                set { visitdate = value; }
             }
             public int From
             {
