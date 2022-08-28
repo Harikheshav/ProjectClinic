@@ -110,25 +110,27 @@ namespace ClinicBusiness
     }
     public class Doctor
     {
-        static int doctor_id;
+        static int doctor_id=1;
         string fname;
         string lname;
         char sex;
         string spec;
-        int visithrs;
-        public Doctor(string fname, string lname, char sex, string spec, int visithrs)
+        int from;
+        int to;
+        public Doctor(string fname, string lname, char sex, string spec, int from,int to)
         {
             this.fname = fname;
             this.lname = lname;
             this.sex = sex;
             this.spec = spec;
-            this.visithrs = visithrs;
+            this.from = from;
+            this.to = to;
         }
 
         public int Doctor_id
         {
             get { return doctor_id; }
-            set { doctor_id++; }
+            set { doctor_id=value; }
         }
         public char Sex
         {
@@ -162,28 +164,36 @@ namespace ClinicBusiness
             get { return spec; }
             set { spec = value; }
         }
-        public int Visithrs
+        public int From
         {
-            get { return visithrs; }
+            get { return from; }
             set
             {
-                visithrs = value;
+                from = value;
+            }
+        }
+        public int To
+        {
+            get { return to; }
+            set
+            {
+                to = value;
             }
         }
     }
     public class Patient
     {
-        static int patient_id;
+        static int patient_id = 1;
         string fname;
         string lname;
         char sex;
         int age;
-        DateOnly dob;
+        DateTime dob;
         public Patient()
         {
 
         }
-        public Patient(string fname, string lname, char sex, int age, DateOnly dob)
+        public Patient(string fname, string lname, char sex, int age, DateTime dob)
         {
             this.fname = fname;
             this.lname = lname;
@@ -196,7 +206,7 @@ namespace ClinicBusiness
         public int Patient_id
         {
             get { return patient_id; }
-            set { patient_id++; }
+            set { patient_id = value; }
         }
         public char Sex
         {
@@ -240,7 +250,7 @@ namespace ClinicBusiness
                 }
             }
         }
-        public DateOnly Dob
+        public DateTime Dob
         {
             get { return dob; }
             set
@@ -248,20 +258,29 @@ namespace ClinicBusiness
                 dob = value;
             }
         }
+    }
         public class Appoinment
         {
             int patient_id;
             string spec;
             int doctor_id;
-            DateOnly visitdate;
-            TimeOnly apptime;
-            public Appoinment(int patient_id, string spec, int doctor_id, DateOnly visitdate, TimeOnly apptime)
+            DateTime visitdate;
+            int from;
+            int to;
+            public Appoinment()
+            {
+
+
+            }
+            public Appoinment(int patient_id, string spec, int doctor_id, DateTime visitdate, int from,int to)
             {
                 this.patient_id = patient_id;
                 this.spec = spec;
                 this.doctor_id = doctor_id;
                 this.visitdate = visitdate;
-                this.apptime = apptime;
+                this.from = from;
+                this.to = to;
+
             }
             public int Patient_Id
             {
@@ -278,16 +297,27 @@ namespace ClinicBusiness
                 get { return doctor_id; }
                 set { doctor_id = value; }
             }
-            public DateOnly Visitdate
+            public DateTime Visitdate
             {
                 get { return Visitdate; }
                 set { Visitdate = value; }
             }
-            public TimeOnly Apptime
+            public int From
             {
-                get { return Apptime; }
-                set { Apptime = value; }
+                get { return from; }
+                set
+                {
+                    from = value;
+                }
+            }
+            public int To
+            {
+                get { return to; }
+                set
+                {
+                    to = value;
+                }
             }
         }
     }
-}
+
