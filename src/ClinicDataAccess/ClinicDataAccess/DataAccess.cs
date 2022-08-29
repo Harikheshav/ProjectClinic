@@ -30,7 +30,7 @@ namespace ClinicDataAccess
             }
             Console.WriteLine();
         }
-        public void add_patient(SQLCommands obj,Patient p)
+        public int add_patient(SQLCommands obj,Patient p)
         {
             Console.Clear();
             obj.insertdata(tablename: "patient", new Hashtable()
@@ -41,6 +41,12 @@ namespace ClinicDataAccess
                                     { "age", p.Age },
                                     { "dob", p.Dob }
                                 });
+            int pid;
+            Int32.TryParse(obj.SQL_Lst(obj.selectdata(tablename: "patient", colname: "patient_id",
+                wherewhat: "where firstname='" + p.FName + "' and " + "lastname='" + p.LName + 
+                "' and " + "sex='" + p.Sex +
+                "' and " + "age=" + p.Age))[0][0],out pid);
+            return pid;
         }
         public void schedule_app(SQLCommands obj)
         {
@@ -58,6 +64,8 @@ namespace ClinicDataAccess
             }
             Console.WriteLine("Patient Id");
             app.Patient_Id = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Specialisations Available:");
+            Console.WriteLine("General, Internal Medicine, Pediatrics, Orthopedics, Ophthalmology");
             Console.WriteLine("Specialisation");
             string spec = Console.ReadLine();
             dtls = obj.SQL_Lst(obj.selectdata(tablename: "Doctor", wherecolname: "specialisation", what: spec));
@@ -77,15 +85,46 @@ namespace ClinicDataAccess
             app.Doctor_Id = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Visit Date");
             app.Visitdate = DateTime.Parse(Console.ReadLine());
+            int doc_from = Convert.ToInt32(obj.SQL_Lst(obj.selectdata(tablename: "Doctor", colname: "_from", wherecolname: "doctor_id", what: app.Doctor_Id.ToString()))[0][0]);
+            int doc_to = Convert.ToInt32(obj.SQL_Lst(obj.selectdata(tablename: "Doctor", colname: "_to", wherecolname: "doctor_id", what: app.Doctor_Id.ToString()))[0][0]);
+            List<string> app_from = new List<string>();
+            try
+            {
+                app_from = obj.SQL_Lst(obj.selectdata(tablename: "Appointment", colname: "_from", wherecolname: "doctor_id", what: app.Doctor_Id.ToString()))[0];
+            }
+            catch(InvalidOperationException)
+            {
+                Console.WriteLine("No Prior Appoinments");
+            }
+            catch(ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("No Prior Appoinments");
+            }
+            List<int> slots = new List<int>();
+            for (int slot= doc_from; slot< doc_to; slot++)
+            {
+                //if(!app_from.Contains(slot.ToString()))
+                    Console.WriteLine(slot);
+                    slots.Add(slot);
+            }
+            if (slots.Count == 0)
+                Console.WriteLine("Slot Empty");
+            foreach (int slot in slots)
+                Console.WriteLine("Slots Available:" + slot);
             Console.WriteLine("Slot Start Time");
-            app.From = Convert.ToInt32(Console.ReadLine());
-            app.To = app.From + 1;
+            int f = Convert.ToInt32(Console.ReadLine()); //Temporary Variable 
+            if (slots.Contains(f))
+            {
+                app.From = f;
+                app.To = f + 1;
+            }
+            else
+                Console.WriteLine("Slot not Available");
             if (doc_ids.Contains(app.Doctor_Id))
             {
-                int to = Convert.ToInt32(obj.SQL_Lst(obj.selectdata(tablename: "Doctor", colname: "_to", wherecolname: "doctor_id", what: app.Doctor_Id.ToString()))[0][0]);
                 //only one value possible due to column being pk constraint with int type  
                 //if Appoinment does not start at doctor's slot end or after that
-                if (app.From <= to)
+                if (app.From <= doc_to)
                     obj.insertdata(tablename: "Appointment", new Hashtable() { { "doctor_id", app.Doctor_Id }, { "patient_id", app.Patient_Id }, { "visitdate", app.Visitdate }, { "_from", app.From }, { "_to", app.To } });
                 else
                     Console.WriteLine("Incorrect Slot");

@@ -76,7 +76,8 @@ namespace ClinicClient
                                 P.Age = Convert.ToInt32(Console.ReadLine());
                                 Console.WriteLine("Date Of Birth");
                                 P.Dob = DateTime.Parse(Console.ReadLine());
-                                da.add_patient(cd,P);
+                                Console.WriteLine("Patient Id:"+da.add_patient(cd,P));
+                                
                             }
                             if (choice.ToLower() == "schedule appointment" || choice == "3" || choice.ToLower() == "sa")
                             {
