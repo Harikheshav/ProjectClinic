@@ -19,19 +19,28 @@ namespace ClinicClient
             Console.WriteLine("Choice:");
             choice = Console.ReadLine();
             FrontOffice fo = new FrontOffice();
+            List<List<string>> login_dtls;
+            DataAccess da = new DataAccess();
                 try
                 {
                     if (choice.ToLower() == "l" || choice.ToLower() == "login")
                     {
-                        string username, password;
-                        Console.Clear();
-                        Console.WriteLine("                 Login                  ");
-                        Console.WriteLine("Username");
-                        username = Console.ReadLine();
-                        Console.WriteLine("Password");
-                        password = Console.ReadLine();
-                        DataAccess da = new DataAccess();
-                        List<List<string>> login_dtls = da.login_check(cd, username, password);
+                        try
+                        {
+                            string username, password;
+                            Console.Clear();
+                            Console.WriteLine("                 Login                  ");
+                            Console.WriteLine("Username");
+                            username = Console.ReadLine();
+                            Console.WriteLine("Password");
+                            password = Console.ReadLine();
+                            login_dtls = da.login_check(cd, username, password);
+                        }
+                        catch (FormatException)
+                        {
+                            login_dtls = new List<List<string>>();
+                            Console.WriteLine("Some other Format expected try again!!!");
+                        }
                         //Checks if a login instance is true.
                         if (login_dtls.Count == 1)
                         {
@@ -54,37 +63,57 @@ namespace ClinicClient
                                 //Function for adding a patient detail to database
                                 if (choice.ToLower() == "add patient" || choice == "2" || choice.ToLower() == "ap")
                                 {
-                                    Patient P = new Patient();
-                                    Console.WriteLine("First Name");
-                                    P.FName = Console.ReadLine();
-                                    Console.WriteLine("Last Name");
-                                    P.LName = Console.ReadLine();
-                                    Console.WriteLine("Sex");
-                                    P.Sex = Convert.ToChar(Console.ReadLine());
-                                    Console.WriteLine("Age");
-                                    P.Age = Convert.ToInt32(Console.ReadLine());
-                                    Console.WriteLine("Date Of Birth");
-                                    P.Dob = DateTime.Parse(Console.ReadLine());
-                                    int pid = da.add_patient(cd,P);
-                                    if (pid != 0)
-                                        Console.WriteLine("Patient Id:" + pid);
-                                    else
-                                        Console.WriteLine("Some error occured!");
+                                    try
+                                    {
+                                        Patient P = new Patient();
+                                        Console.WriteLine("First Name");
+                                        P.FName = Console.ReadLine();
+                                        Console.WriteLine("Last Name");
+                                        P.LName = Console.ReadLine();
+                                        Console.WriteLine("Sex");
+                                        P.Sex = Convert.ToChar(Console.ReadLine());
+                                        Console.WriteLine("Age");
+                                        P.Age = Convert.ToInt32(Console.ReadLine());
+                                        Console.WriteLine("Date Of Birth");
+                                        P.Dob = DateTime.Parse(Console.ReadLine());
+                                        int pid = da.add_patient(cd, P);
+                                        if (pid != 0)
+                                            Console.WriteLine("Patient Id:" + pid);
+                                        else
+                                            Console.WriteLine("Some error occured!");
+                                    }
+                                    catch(FormatException)
+                                    {
+                                        Console.WriteLine("Some other Format expected try again!!!");
+                                    }
 
                                 }
                                 //Function for scheduling a appointment for a Patient to a Doctor.
                                 if (choice.ToLower() == "schedule appointment" || choice == "3" || choice.ToLower() == "sa")
                                 {
-                                    int appid = da.schedule_app(cd);
-                                    if (appid != 0)
-                                        Console.WriteLine("Appoinment Id:" +appid );
-                                    else
-                                        Console.WriteLine("Some error occured!");
+                                    try
+                                    {
+                                        int appid = da.schedule_app(cd);
+                                        if (appid != 0)
+                                            Console.WriteLine("Appoinment Id:" + appid);
+                                        else
+                                            Console.WriteLine("The appoinment could not be scheduled due to the above issue please try again!!!");
+                                    }
+                                    catch (FormatException)
+                                    {
+                                        Console.WriteLine("Some other Format expected try again!!!");
+                                    }
                                 }
                                 //Function for cancelling a appointment registered for a Patient to a Doctor.
                                 if (choice.ToLower() == "cancel appointment" || choice == "4" || choice.ToLower() == "ca")
-                                {
-                                    da.cancel_app(cd);
+                                {   try
+                                    {
+                                        da.cancel_app(cd);
+                                    }
+                                    catch (SQLCommands.WrongSQLCommand)
+                                    {
+                                        Console.WriteLine("Some other Format expected try again!!!");
+                                    }
                                 }
                                 //Logout-Call
                                 if (choice.ToLower() == "Logout" || choice == "5" || choice.ToLower() == "l")
@@ -105,18 +134,20 @@ namespace ClinicClient
                             Console.WriteLine("Incorrect Login! Try again...");
                         }
                     }
-                    //Registration Call
-                    if (choice.ToLower() == "r" || choice.ToLower() == "register")
+                    try
                     {
-                        Console.WriteLine("Username");
-                        fo.Uname = Console.ReadLine();
-                        Console.WriteLine("First Name");
-                        fo.FName = Console.ReadLine();
-                        Console.WriteLine("Last Name");
-                        fo.LName = Console.ReadLine();
-                        Console.WriteLine("Password");
-                        fo.Password = Console.ReadLine();
-                        cd.insertdata(tablename: "frontoffice", new Hashtable()
+                        //Registration Call
+                        if (choice.ToLower() == "r" || choice.ToLower() == "register")
+                        {
+                            Console.WriteLine("Username");
+                            fo.Uname = Console.ReadLine();
+                            Console.WriteLine("First Name");
+                            fo.FName = Console.ReadLine();
+                            Console.WriteLine("Last Name");
+                            fo.LName = Console.ReadLine();
+                            Console.WriteLine("Password");
+                            fo.Password = Console.ReadLine();
+                            cd.insertdata(tablename: "frontoffice", new Hashtable()
                     {
                         { "username", fo.Uname },
                         { "firstname", fo.FName },
@@ -124,6 +155,11 @@ namespace ClinicClient
                         { "password", fo.Password }
                     });
 
+                        }
+                    }
+                    catch(FormatException)
+                    {
+                        Console.WriteLine("Some other Format expected try again!!!");
                     }
                     //Query for coming out of Console App
                     if (choice.ToLower() == "q" || choice.ToLower() == "quit")

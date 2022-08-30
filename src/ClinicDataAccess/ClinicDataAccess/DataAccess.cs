@@ -109,9 +109,17 @@ namespace ClinicDataAccess
             try
             {
                 
-                app_from = obj.SQL_Lst(obj.selectdata(tablename: "Appointment", colname: "_from", wherewhat:"doctor_id=" + app.Doctor_Id.ToString() + " and visit_date='" + app.Visitdate.ToString()+"'"))[0];
+                app_from = obj.SQL_Lst(obj.selectdata(tablename: "Appointment", colname: "_from", wherewhat:"where doctor_id=" + app.Doctor_Id.ToString() + " and visitdate='" + app.Visitdate.Year+"-"+app.Visitdate.Month+"-"+app.Visitdate.Day+"'"))[0];
             }
             catch (SQLCommands.WrongSQLCommand)
+            {
+                app_from = new List<string>();
+            }
+            catch(IndexOutOfRangeException)
+            {
+                app_from = new List<string>();
+            }
+            catch(ArgumentOutOfRangeException)
             {
                 app_from = new List<string>();
             }
@@ -119,7 +127,6 @@ namespace ClinicDataAccess
             {
                 if (!app_from.Contains(slot.ToString()))
                 {
-                    Console.WriteLine("Slot:" + slot);
                     slots.Add(slot);
                 }
             }
